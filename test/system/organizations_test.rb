@@ -27,9 +27,9 @@ class OrganizationsTest < ApplicationSystemTestCase
     visit new_organization_url
     fill_in "organization_name", with: "Test New Organization"
     click_on "Create Organization"
-    
+
     # Assert we're on the show page by checking for the organization name
-    assert_text "Test New Organization" 
+    assert_text "Test New Organization"
     click_on "Back to organizations"
   end
 
@@ -47,10 +47,10 @@ class OrganizationsTest < ApplicationSystemTestCase
     fill_in "organization_name", with: "Organization to Delete"
     click_on "Create Organization"
     assert_text "Organization to Delete"
-    
+
     click_button "Destroy this organization"
     page.driver.browser.switch_to.alert.accept rescue nil
-    
+
     assert_selector "h1", text: "Organizations"
   end
 end
