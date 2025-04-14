@@ -22,3 +22,7 @@ console_command = '/rails/bin/rails console'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 1024
+
+# Section to run database migrations on deploy
+[deploy]
+  release_command = "bundle exec rails db:migrate"
