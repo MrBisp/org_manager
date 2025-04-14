@@ -4,7 +4,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @organization = organizations(:one)
     @user = users(:one) # Admin user from fixture
-    
+
     # Sign in as admin
     post session_url, params: { email_address: @user.email_address, password: "password" }
   end
@@ -45,7 +45,7 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy organization" do
     # We can't delete the organization the user belongs to, so create a new one
     new_org = Organization.create!(name: "To Be Deleted")
-    
+
     assert_difference("Organization.count", -1) do
       delete organization_url(new_org)
     end
