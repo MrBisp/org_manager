@@ -59,4 +59,4 @@ class RegistrationsController < ApplicationController
     def set_organizations
       @organizations = Organization.all
     end
-end 
+end

@@ -23,7 +23,7 @@ class OrganizationsController < ApplicationController
   def create
     @organization = Organization.new(organization_params) # First we create a new organization with the params.
 
-    
+
     respond_to do |format|
       if @organization.save # If the organization is saved, we redirect to the organization show page.
         format.html { redirect_to @organization, notice: "Organization was successfully created." }
