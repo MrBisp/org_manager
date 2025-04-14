@@ -61,11 +61,11 @@ class OrganizationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = Organization.find(params.expect(:id))
+      @organization = Organization.find(params.require(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.expect(organization: [ :name ])
+      params.require(:organization).permit(:name)
     end
 end
