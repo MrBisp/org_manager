@@ -1,0 +1,25 @@
+<% if notice %>
+  <div class="notice"><%= notice %></div>
+<% end %>
+
+<% content_for :title, "Organizations" %>
+
+<div class="container">
+  <h1>Organizations</h1>
+
+  <div id="organizations" class="organizations">
+    <% @organizations.each do |organization| %>
+      <div class="organization-item">
+        <%= render organization %>
+        <div class="organization-actions">
+          <%= link_to "Show this organization", organization %>
+          <% if Current.user&.organization_id == organization.id %>
+            <span class="current-org-indicator">Your organization</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "New organization", new_organization_path, class: "btn" %>
+</div>

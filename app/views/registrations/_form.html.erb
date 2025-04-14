@@ -1,0 +1,63 @@
+<%= form_with model: @user, url: registrations_path, data: { controller: "organization-toggle" } do |form| %> 
+<% # form_with is used to create a form with a model. So in this case, the form is created with the @user model, and uses the registrations_path (defined in app/controllers/registrations_controller.rb) as the URL. The controller="organization-toggle" attribute is used to add the organization-toggle controller to the form (stimulis). %>
+  <% if @user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <% # Pluralize returns "error" for 1 error and "errors" for more than 1 error %>
+      <ul>
+        <% @user.errors.each do |error| %>
+        <% # Generally when we write do, it is kind of like a foreach loop in react. %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :email_address %>
+    <%= form.email_field :email_address, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation %>
+    <%= form.password_field :password_confirmation, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :organization_id, "Organization" %>
+    <% # We map through the organizations and create an array of organization names and ids. %>
+    <% # The prompt is used to display a message to the user when the select element is empty. %>
+    <%= form.select :organization_id, 
+        @organizations.map { |org| [org.name, org.id] } + [["Create new organization", "new"]],
+        { prompt: "Select an organization or create a new one" }, 
+        required: true,
+        data: { 
+          organization_toggle_target: "select",
+          action: "change->organization-toggle#toggleFields" 
+        } 
+    %>
+    <% # This is the target for the organization-toggle controller (defined in app/javascript/controllers/organization_toggle_controller.js). %>
+    <% # This is the action that will be triggered when the select element is changed. %>
+  </div>
+
+  <div id="new_organization_fields" 
+       data-organization-toggle-target="fields" 
+       style="display: none;">
+    <h3>New Organization Details</h3>
+    <div>
+      <%= label_tag :organization_name, "Organization Name" %>
+      <%= text_field_tag :organization_name, nil, required: false, data: { "organization-toggle-target": "nameField" } %>
+      <% # nil (or null) is used to indicate that the field is not yet assigned a value. %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.submit "Sign up" %>
+    <% # When we submit the form, the form will be submitted to the registrations_path (defined in app/controllers/registrations_controller.rb). Through conventions is knows to use the create action. %>
+  </div>
+<% end %> 

@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>New User for <%= @organization.name %></h1>
+
+  <%= render "form" %>
+
+  <div class="mt-4">
+    <%= link_to "Back to Users", organization_users_path(@organization) %>
+  </div>
+</div>

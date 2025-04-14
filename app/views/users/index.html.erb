@@ -1,0 +1,48 @@
+<div class="container">
+  <h1>Users in <%= @organization.name %></h1>
+
+  <% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <div class="actions-bar">
+    <% if Current.user&.admin? %>
+      <%= link_to "Add New User", new_organization_user_path(@organization), class: "btn" %>
+      <%= link_to "Assign Existing User", assign_organization_users_path(@organization), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.email_address %></td>
+          <td><%= user.role.titleize %></td>
+          <td class="actions">
+            <%= link_to "Show", organization_user_path(@organization, user) %>
+            <% if Current.user&.admin? %>
+              | <%= link_to "Edit", edit_organization_user_path(@organization, user) %>
+              | <%= link_to "Remove", organization_user_path(@organization, user), 
+                           class: "text-danger",
+                           data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <%= link_to "Back to Organizations", organizations_path %>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="container">
+  <h1>Assign Existing User to <%= @organization.name %></h1>
+
+  <% if flash[:alert] %>
+    <div class="alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <% if @available_users.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Current Organization</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @available_users.each do |user| %>
+          <tr>
+            <td><%= user.email_address %></td>
+            <td><%= user.organization&.name || "None" %></td>
+            <td>
+              <%= button_to "Assign to #{@organization.name}", 
+                  update_assignment_organization_users_path(@organization),
+                  params: { user_id: user.id },
+                  method: :post,
+                  class: "btn btn-sm",
+                  data: { turbo_confirm: "Are you sure you want to move this user?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No users available to assign.</p>
+  <% end %>
+
+  <div class="mt-4">
+    <%= link_to "Back to Users", organization_users_path(@organization) %>
+  </div>
+</div> 

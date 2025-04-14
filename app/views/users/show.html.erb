@@ -1,0 +1,25 @@
+<div class="container">
+  <h1>User Details</h1>
+
+  <div class="user-details">
+    <p>
+      <strong>Email:</strong>
+      <%= @user.email_address %>
+    </p>
+
+    <p>
+      <strong>Role:</strong>
+      <%= @user.role.titleize %>
+    </p>
+  </div>
+
+  <div class="actions-bar">
+    <% if Current.user&.admin? %>
+      <%= link_to "Edit", edit_organization_user_path(@organization, @user), class: "btn btn-secondary" %>
+      <%= link_to "Remove", organization_user_path(@organization, @user), 
+                 class: "btn btn-danger",
+                 data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <% end %>
+    <%= link_to "Back to Users", organization_users_path(@organization) %>
+  </div>
+</div>

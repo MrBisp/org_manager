@@ -1,0 +1,24 @@
+<div class="container">
+  <% if flash[:alert] %>
+    <div class="alert"><%= flash[:alert] %></div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+  <% end %>
+
+  <h1>Sign in</h1>
+
+  <div class="login-form">
+    <%= form_with url: session_path do |form| %>
+      <% # :email_address and :password are parameter names that are later passed to the SessionsController#create action. %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %>
+      <%= form.submit "Sign in", class: "btn" %>
+    <% end %>
+  </div>
+
+  <div class="auth-links mt-4">
+    <%= link_to "Forgot password?", new_password_path %>
+    <%= link_to "Sign up", new_registration_path %>
+  </div>
+</div>

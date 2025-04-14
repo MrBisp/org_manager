@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Forgot your password?</h1>
+
+  <% if flash[:alert] %>
+    <div class="alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <div class="login-form">
+    <p class="form-instructions">Enter your email address below and we'll send you instructions to reset your password.</p>
+    
+    <%= form_with url: passwords_path do |form| %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %>
+      <%= form.submit "Email reset instructions", class: "btn" %>
+    <% end %>
+  </div>
+
+  <div class="auth-links mt-4">
+    <%= link_to "Back to login", new_session_path %>
+  </div>
+</div>

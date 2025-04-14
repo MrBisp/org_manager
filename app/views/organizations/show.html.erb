@@ -1,0 +1,17 @@
+<% if notice %>
+  <div class="notice"><%= notice %></div>
+<% end %>
+
+<div class="container">
+  <%= render @organization %>
+
+  <div class="actions-bar">
+    <%= link_to "View Users", organization_users_path(@organization), class: "btn" %>
+    <%= link_to "Edit this organization", edit_organization_path(@organization), class: "btn btn-secondary" %>
+    <%= link_to "Back to organizations", organizations_path %>
+  </div>
+
+  <div class="mt-4">
+    <%= button_to "Destroy this organization", @organization, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "Are you sure? This will delete all users associated with this organization." } %>
+  </div>
+</div>
