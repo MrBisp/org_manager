@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # This defines the routes for organization users so that they can be found at /organizations/:organization_id/users/:id
   resources :organizations do
     resources :users do

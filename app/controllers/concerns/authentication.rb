@@ -3,7 +3,7 @@ module Authentication
 
   included do
     before_action :require_authentication
-    helper_method :authenticated? #helper_method is used to make the authenticated? method available in all views rendered by the controller, which is all views because we included the authentication concern in the application controller.
+    helper_method :authenticated? # helper_method is used to make the authenticated? method available in all views rendered by the controller, which is all views because we included the authentication concern in the application controller.
   end
 
   class_methods do

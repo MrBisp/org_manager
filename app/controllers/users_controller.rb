@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 
   def update_assignment
     @user = User.find(params[:user_id])
-    
+
     if @user.update(organization: @organization)
       redirect_to organization_users_path(@organization), notice: "User was successfully assigned to organization."
     else
