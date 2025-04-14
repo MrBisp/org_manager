@@ -2,6 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+# Increase default wait time for Capybara in system tests
+Capybara.default_max_wait_time = 5
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
