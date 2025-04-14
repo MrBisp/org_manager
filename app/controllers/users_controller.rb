@@ -71,6 +71,13 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:email_address, :password, :password_confirmation, :role)
+      permitted = params.require(:user).permit(:email_address, :password, :password_confirmation)
+      
+      # Only allow admin role assignment if the current user is an admin
+      if Current.user&.admin?
+        permitted[:role] = params[:user][:role]
+      end
+      
+      permitted
     end
 end
