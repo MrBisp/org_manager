@@ -2,31 +2,68 @@
 
 This README contains my own notes on how the application works. Writing this down forced me to get a good understanding of what is going on, and how things work.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This README also documents the steps necessary to get the application up and running.
 
-Things you may want to cover:
+## Development Setup
 
-* Ruby version
+* Ruby version: 3.4.2
+* Database: SQLite3
+* System dependencies: Docker (if running in container)
 
-* System dependencies
+## Running Locally
 
-* Configuration
+You can run the application either directly or using Docker.
 
-* Database creation
+### Direct Setup:
+1. Install Ruby 3.4.2
+2. Run `bundle install`
+3. Set up the database: `rails db:setup`
+4. Start the server: `rails server`
 
-* Database initialization
+### Docker Setup:
+1. Build the image:
+   ```bash
+   docker build -t org-manager:latest .
+   ```
+2. Run the container:
+   ```bash
+   docker run -p 3000:8080 org-manager:latest
+   ```
+3. Access the application at http://localhost:3000
 
-* How to run the test suite
+## Deployment
 
-* Services (job queues, cache servers, search engines, etc.)
+This application is deployed using Docker on DigitalOcean. Here's how to deploy:
 
-* Deployment instructions
+### Prerequisites
+- Docker Hub account
+- DigitalOcean account
 
-* ...
+### Deployment Steps
 
+1. Build and push the Docker image:
+   ```bash
+   docker build -t your-dockerhub-username/org-manager:latest .
+   docker push your-dockerhub-username/org-manager:latest
+   ```
 
-# How the application works.
+2. Create a DigitalOcean Droplet
+
+3. SSH into your Droplet:
+   ```bash
+   ssh root@your-droplet-ip
+   ```
+
+4. Pull and run the container:
+   ```bash
+   docker pull your-dockerhub-username/org-manager:latest
+   docker run -d -p 80:8080 --restart unless-stopped your-dockerhub-username/org-manager:latest
+   ```
+
+Your application should now be accessible at http://your-droplet-ip (notice http not https).
+The docker image also comes with a sqlite3 database!
+
+## How the application works.
 
 ## New user
 When a new user visits the site for the first time, we first look at config/route.rb and see `root "organizations#index"`. This means that the organizations index is used as root. Organizations index is defined in app/controllers/organizations_controller.rb.
@@ -75,107 +112,3 @@ The CSS in this application is organized into modular files for better maintaina
 
 Files are loaded alphabetically by the asset pipeline and compiled into a single CSS file for production.
 
-## Deploying to Production
-
-Rails comes with a deployment tool called Kamal that we can use to deploy our application directly to a server. Kamal uses Docker containers to run your application and deploy with zero downtime.
-
-By default, Rails comes with a production-ready Dockerfile that Kamal will use to build the Docker image, creating a containerized version of your application with all its dependencies and configurations. This Dockerfile uses Thruster to compress and serve assets efficiently in production.
-
-### Prerequisites
-
-To deploy with Kamal, you'll need:
-
-- A server running Ubuntu LTS with 1GB RAM or more
-- A Docker Hub account and access token
-
-### Step 1: Set up Docker Hub
-
-1. Create a Docker Hub account if you don't already have one
-2. Create a new repository for your application image (e.g., "org-manager")
-3. Create an access token with Read & Write permissions
-
-### Step 2: Configure Deployment
-
-Open `config/deploy.yml` and update it with your server details:
-
-```yaml
-# Name of your application. Used to uniquely configure containers.
-service: org-manager
-
-# Name of the container image.
-image: your-dockerhub-username/org-manager
-
-# Deploy to these servers.
-servers:
-  web:
-    - your-server-ip-address
-
-# Credentials for your image host.
-registry:
-  # Specify the registry server, if you're not using Docker Hub
-  # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-dockerhub-username
-```
-
-To enable SSL for your application, add a domain under the `proxy` section:
-
-```yaml
-proxy:
-  ssl: true
-  host: app.example.com
-```
-
-Make sure your DNS record points to your server, and Kamal will use LetsEncrypt to issue an SSL certificate for the domain.
-
-### Step 3: Deploy the Application
-
-Export your Docker Hub access token:
-
-```bash
-export KAMAL_REGISTRY_PASSWORD=your-access-token
-```
-
-Run the setup command to configure your server and deploy your application:
-
-```bash
-bin/kamal setup
-```
-
-This will:
-1. Install necessary dependencies on your server
-2. Build and push the Docker image
-3. Set up the container and database
-4. Configure a web server with SSL if specified
-
-### Step 4: View Your Application
-
-Open your browser and enter your server's IP address or domain. You should see your application running.
-
-### Step 5: Adding a User in Production
-
-To create an admin user in production, open a production Rails console:
-
-```bash
-bin/kamal console
-```
-
-Then create a user:
-
-```ruby
-org_manager(prod)> User.create!(
-  email_address: "you@example.org", 
-  password: "s3cr3t", 
-  password_confirmation: "s3cr3t",
-  role: :admin
-)
-```
-
-### Future Deployments
-
-When you make changes to your application and want to update the production environment:
-
-```bash
-bin/kamal deploy
-```
-
-This will build a new Docker image, push it to Docker Hub, and deploy it to your server with zero downtime.
